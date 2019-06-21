@@ -45,10 +45,6 @@ public class StaffController {
 
  public void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   String account = request.getParameter("account");
-  //账户默认密码
-  String password = "123456";
-  String status = request.getParameter("status");
-
 
   String name = request.getParameter("name");
   String sex = request.getParameter("sex");
@@ -73,5 +69,56 @@ public class StaffController {
   staff.setIdNumber(idNumber);
   staffService.addStaff(staff);
   response.sendRedirect("list.do");
+ }
+
+ public void toEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  int id = Integer.parseInt(request.getParameter("id"));
+  Staff staff = staffService.findById(id);
+  request.setAttribute("OBJ", staff);
+  List<Department> departments = departmentService.getAll();
+  request.setAttribute("DLIST", departments);
+  request.getRequestDispatcher("../staff_edit.jsp").forward(request, response);
+ }
+
+ public void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  int id = Integer.parseInt(request.getParameter("id"));
+  Staff staff = staffService.findById(id);
+
+  String account = request.getParameter("account");
+  int did = Integer.parseInt(request.getParameter("did"));
+  String name = request.getParameter("name");
+  String sex = request.getParameter("sex");
+  String idNumber = request.getParameter("idNumber");
+  String bornDateStr = request.getParameter("bornDate");
+  Date bornDate = null;
+  try {
+   bornDate = new SimpleDateFormat("yyyy-mm-dd").parse(bornDateStr);
+  } catch (ParseException e) {
+   e.printStackTrace();
+  }
+  String info = request.getParameter("info");
+  staff.setAccount(account);
+  staff.setDid(did);
+  staff.setName(name);
+  staff.setSex(sex);
+  staff.setIdNumber(idNumber);
+  staff.setBornDate(bornDate);
+  staff.setInfo(info);
+  staffService.updateStaff(staff);
+  response.sendRedirect("list.do");
+
+ }
+
+ public void remove(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  int id = Integer.parseInt(request.getParameter("id"));
+  staffService.deleteStaff(id);
+  response.sendRedirect("list.do");
+ }
+
+ public void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  int id = Integer.parseInt(request.getParameter("id"));
+  Staff staff = staffService.findById(id);
+  request.setAttribute("OBJ", staff);
+  request.getRequestDispatcher("../staff_detail.jsp").forward(request, response);
  }
 }

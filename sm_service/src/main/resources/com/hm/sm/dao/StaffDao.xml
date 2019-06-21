@@ -26,7 +26,7 @@
     </insert>
 
     <update id="updateStaff" parameterType="Staff">
-        update staff set accout=#{account},password=#{password},
+        update staff set account=#{account},password=#{password},
           status=#{status},did=#{did},name=#{name},sex=#{sex},id_number=#{idNumber},
           work_time=#{workTime},leave_time=#{leaveTime},bornDate=#{bornDate},info=#{info} where  id=#{id}
     </update>
